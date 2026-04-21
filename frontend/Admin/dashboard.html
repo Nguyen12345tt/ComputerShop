@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGear - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans flex h-screen overflow-hidden">
+
+    <aside class="bg-gray-900 text-white w-64 flex-shrink-0 hidden md:flex flex-col transition-all duration-300">
+        <div class="h-16 flex items-center px-6 border-b border-gray-800">
+            <h1 class="text-xl font-bold tracking-wider text-blue-400">
+                <i class="fa-solid fa-microchip mr-2"></i>TechGear <span class="text-white text-sm font-normal">Admin</span>
+            </h1>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow">
+                <i class="fa-solid fa-chart-pie w-5"></i> Tổng quan (Dashboard)
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-desktop w-5"></i> Quản lý PC
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-file-invoice-dollar w-5"></i> Quản lý Đơn hàng
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-users w-5"></i> Khách hàng
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-800">
+            <button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-sign-out-alt"></i> Đăng xuất
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        
+        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+            <button class="md:hidden text-gray-600 hover:text-gray-900">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            
+            <h2 class="text-xl font-semibold text-gray-800 hidden md:block">Tổng quan hệ thống</h2>
+
+            <div class="flex items-center gap-4">
+                <button class="text-gray-400 hover:text-gray-600 relative">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Admin" class="w-8 h-8 rounded-full">
+                    <span class="text-sm font-medium text-gray-700">Xin chào, Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-blue-500">
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-lg text-2xl"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Tổng số PC</p>
+                        <h3 class="text-2xl font-bold text-gray-800">24</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-green-500">
+                    <div class="p-3 bg-green-50 text-green-600 rounded-lg text-2xl"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Doanh thu tháng</p>
+                        <h3 class="text-2xl font-bold text-gray-800">125.5Mđ</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-orange-500">
+                    <div class="p-3 bg-orange-50 text-orange-600 rounded-lg text-2xl"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Đơn hàng mới</p>
+                        <h3 class="text-2xl font-bold text-gray-800">12</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 class="font-bold text-gray-800">Sản phẩm vừa thêm</h3>
+                    <button class="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition">
+                        <i class="fa-solid fa-plus mr-1"></i> Thêm PC
+                    </button>
+                </div>
+                <div class="p-0 overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-3">Mã SP</th>
+                                <th class="px-6 py-3">Tên cấu hình</th>
+                                <th class="px-6 py-3">Giá bán</th>
+                                <th class="px-6 py-3">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-gray-700" id="adminProductTable">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">#PC001</td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-200 rounded object-cover"></div>
+                                    <span>PC Gaming High-End (i7 13700K)</span>
+                                </td>
+                                <td class="px-6 py-4 text-red-600 font-semibold">45.000.000 đ</td>
+                                <td class="px-6 py-4">
+                                    <button class="text-blue-500 hover:text-blue-700 mr-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
