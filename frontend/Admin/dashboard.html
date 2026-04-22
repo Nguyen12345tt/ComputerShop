@@ -15,113 +15,124 @@
                 <i class="fa-solid fa-microchip mr-2"></i>TechGear <span class="text-white text-sm font-normal">Admin</span>
             </h1>
         </div>
-        
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow">
-                <i class="fa-solid fa-chart-pie w-5"></i> Tổng quan (Dashboard)
+                <i class="fa-solid fa-chart-pie w-5"></i> Tổng quan
             </a>
             <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
                 <i class="fa-solid fa-desktop w-5"></i> Quản lý PC
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-                <i class="fa-solid fa-file-invoice-dollar w-5"></i> Quản lý Đơn hàng
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-                <i class="fa-solid fa-users w-5"></i> Khách hàng
-            </a>
         </nav>
-
-        <div class="p-4 border-t border-gray-800">
-            <button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
-                <i class="fa-solid fa-sign-out-alt"></i> Đăng xuất
-            </button>
-        </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-        
         <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
-            <button class="md:hidden text-gray-600 hover:text-gray-900">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
-            
-            <h2 class="text-xl font-semibold text-gray-800 hidden md:block">Tổng quan hệ thống</h2>
-
-            <div class="flex items-center gap-4">
-                <button class="text-gray-400 hover:text-gray-600 relative">
-                    <i class="fa-regular fa-bell text-xl"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
-                </button>
-                <div class="flex items-center gap-2 cursor-pointer">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Admin" class="w-8 h-8 rounded-full">
-                    <span class="text-sm font-medium text-gray-700">Xin chào, Admin</span>
-                </div>
+            <h2 class="text-xl font-semibold text-gray-800 hidden md:block">Quản lý Sản Phẩm</h2>
+            <div class="flex items-center gap-4 cursor-pointer">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Admin" class="w-8 h-8 rounded-full">
+                <span class="text-sm font-medium text-gray-700">Xin chào, Admin</span>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-6">
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-blue-500">
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-lg text-2xl"><i class="fa-solid fa-boxes-stacked"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Tổng số PC</p>
-                        <h3 class="text-2xl font-bold text-gray-800">24</h3>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-green-500">
-                    <div class="p-3 bg-green-50 text-green-600 rounded-lg text-2xl"><i class="fa-solid fa-money-bill-trend-up"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Doanh thu tháng</p>
-                        <h3 class="text-2xl font-bold text-gray-800">125.5Mđ</h3>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 border-l-4 border-l-orange-500">
-                    <div class="p-3 bg-orange-50 text-orange-600 rounded-lg text-2xl"><i class="fa-solid fa-cart-shopping"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Đơn hàng mới</p>
-                        <h3 class="text-2xl font-bold text-gray-800">12</h3>
-                    </div>
-                </div>
-            </div>
-
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 class="font-bold text-gray-800">Sản phẩm vừa thêm</h3>
-                    <button class="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition">
-                        <i class="fa-solid fa-plus mr-1"></i> Thêm PC
+                    <h3 class="font-bold text-gray-800">Danh sách máy tính PC</h3>
+                    <button onclick="openModal()" class="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow transition flex items-center">
+                        <i class="fa-solid fa-plus mr-2"></i> Thêm PC Mới
                     </button>
                 </div>
-                <div class="p-0 overflow-x-auto">
+                
+                <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
                             <tr>
-                                <th class="px-6 py-3">Mã SP</th>
                                 <th class="px-6 py-3">Tên cấu hình</th>
+                                <th class="px-6 py-3">Thông số</th>
                                 <th class="px-6 py-3">Giá bán</th>
                                 <th class="px-6 py-3">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-gray-700" id="adminProductTable">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 font-medium">#PC001</td>
-                                <td class="px-6 py-4 flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-gray-200 rounded object-cover"></div>
-                                    <span>PC Gaming High-End (i7 13700K)</span>
-                                </td>
-                                <td class="px-6 py-4 text-red-600 font-semibold">45.000.000 đ</td>
-                                <td class="px-6 py-4">
-                                    <button class="text-blue-500 hover:text-blue-700 mr-2"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
+                            <tr><td colspan="4" class="text-center py-4">Đang tải dữ liệu...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </main>
+
+    <div id="productModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800 text-lg">Thêm PC Mới</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+        <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên máy tính</label>
+                    <input type="text" id="inputName" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500" placeholder="VD: PC Gaming i5...">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Link Ảnh (URL)</label>
+                    <input type="text" id="inputImage" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500" placeholder="VD: https://.../hinh-anh.jpg">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Hãng CPU</label>
+                        <select id="inputCpu" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 bg-white">
+                            <option value="Intel Core i3">Intel Core i3</option>
+                            <option value="Intel Core i5">Intel Core i5</option>
+                            <option value="Intel Core i7">Intel Core i7</option>
+                            <option value="Intel Core i9">Intel Core i9</option>
+                            <option value="AMD Ryzen 3">AMD Ryzen 3</option>
+                            <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                            <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+                            <option value="AMD Ryzen 9">AMD Ryzen 9</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dung lượng RAM</label>
+                        <select id="inputRam" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 bg-white">
+                            <option value="4GB">4GB</option>
+                            <option value="8GB">8GB</option>
+                            <option value="16GB">16GB</option>
+                            <option value="32GB">32GB</option>
+                            <option value="64GB">64GB</option>
+                            <option value="128GB">128GB</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Ổ cứng</label>
+                        <select id="inputStorage" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 bg-white">
+                            <option value="256GB SSD">256GB SSD</option>
+                            <option value="512GB SSD">512GB SSD</option>
+                            <option value="1TB SSD">1TB SSD</option>
+                            <option value="2TB SSD">2TB SSD</option>
+                        </select>
+                    </div>
+                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Link Ảnh (URL)</label>
+                        <input type="text" id="inputImage" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500" placeholder="VD: https://.../hinh-anh.jpg">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Giá bán (VNĐ)</label>
+                    <input type="number" id="inputPrice" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500" placeholder="VD: 15000000">
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-100">Hủy</button>
+                <button onclick="saveProduct()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md">Lưu Sản Phẩm</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/admin.js"></script>
 </body>
