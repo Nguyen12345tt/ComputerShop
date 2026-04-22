@@ -19,6 +19,8 @@ class Product(BaseModel):
     price: int
     cpu: str
     ram: str
+    storage: str
+    image_url: str = ""
 
 # Database tạm thời (Sẽ lưu vào file JSON cho đơn giản)
 DB_FILE = "database.json"
