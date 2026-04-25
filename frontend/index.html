@@ -11,258 +11,165 @@
 
     <header class="bg-gray-900 text-white p-4 sticky top-0 z-50 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wider cursor-pointer text-blue-400">
+            <h1 class="text-2xl font-bold tracking-wider cursor-pointer text-blue-400" onclick="location.reload()">
                 <i class="fa-solid fa-microchip mr-2"></i>TechGear
             </h1>
             
             <div class="relative w-1/3 hidden md:block">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm PC..." class="w-full py-2 px-4 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm PC..." class="w-full py-2 px-4 rounded-full text-gray-900 outline-none focus:ring-2 focus:ring-blue-500">
                 <i class="fa-solid fa-search absolute right-4 top-3 text-gray-500"></i>
             </div>
             
-            <div class="flex items-center gap-6">
-                <div class="hidden md:flex gap-3">
-                    <button onclick="alert('Tính năng Đăng nhập đang cập nhật!')" class="text-sm font-semibold hover:text-blue-400 transition">Đăng nhập</button>
-                    <button onclick="alert('Tính năng Đăng ký đang cập nhật!')" class="text-sm bg-blue-600 px-4 py-1.5 rounded-full hover:bg-blue-700 font-semibold transition">Đăng ký</button>
+            <div class="flex items-center gap-4">
+                <div id="authButtons" class="flex gap-2">
+                    <button onclick="openAuthModal('login')" class="text-sm font-medium hover:text-blue-400 transition">Đăng nhập</button>
+                    <span class="text-gray-700">|</span>
+                    <button onclick="openAuthModal('register')" class="text-sm font-medium hover:text-blue-400 transition">Đăng ký</button>
                 </div>
-
-                <div class="relative cursor-pointer hover:text-blue-400 transition" onclick="toggleCart()">
-                    <i class="fa-solid fa-shopping-cart text-2xl"></i>
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-xs text-white font-bold px-2 py-1 rounded-full shadow">0</span>
+                <div class="relative cursor-pointer" onclick="toggleCart()">
+                    <i class="fa-solid fa-shopping-bag text-2xl"></i>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-[10px] text-white font-bold px-1.5 py-0.5 rounded-full shadow-sm">0</span>
                 </div>
             </div>
         </div>
     </header>
 
     <main class="container mx-auto my-8 px-4 min-h-screen">
-        <div class="flex justify-between items-end mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-3">Sản phẩm nổi bật</h2>
-        </div>
-
+        <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-3 mb-8">Hàng mới về</h2>
+        
         <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
 
-        <div id="pagination" class="flex justify-center items-center mt-12 gap-2">
-            </div>
+        <div id="pagination" class="flex justify-center items-center mt-12 gap-2"></div>
     </main>
 
-    <div id="cartModal" class="fixed inset-0 bg-black/60 hidden z-50 justify-end backdrop-blur-sm transition-opacity">
-        <div class="bg-white w-full md:w-[400px] h-full shadow-2xl flex flex-col transform transition-transform">
+    <div id="cartModal" class="fixed inset-0 bg-black/60 hidden z-50 justify-end backdrop-blur-sm">
+        <div class="bg-white w-full md:w-[400px] h-full shadow-2xl flex flex-col">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
                 <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-cart-shopping mr-2"></i>Giỏ hàng</h2>
                 <button onclick="toggleCart()" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
-            <div id="cartItems" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-gray-50/50">
-                <p class="text-gray-400 text-center mt-10">Chưa có sản phẩm nào.</p>
-            </div>
-            <div class="p-6 border-t bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <div id="cartItems" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4"></div>
+            <div class="p-6 border-t bg-white">
                 <div class="flex justify-between font-bold text-lg mb-4 text-gray-800">
                     <span>Tổng tiền:</span>
                     <span id="cartTotal" class="text-red-600">0đ</span>
                 </div>
-                <button onclick="checkoutAll()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-md shadow-blue-500/30 transition-colors">
-                    Thanh toán ngay
-                </button>
+                <button onclick="checkoutAll()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition-colors shadow-lg">Thanh toán ngay</button>
             </div>
         </div>
     </div>
 
-    <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpflaFvw7536vms9PBGCwoaXcjBP3SveAtFZE69-SBLGSd-PWDGf3MUCqMAddYB-aD/exec';
+    <div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[60] flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="authTitle" class="text-2xl font-bold text-gray-800">Đăng nhập</h2>
+                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div class="space-y-4">
+                <input type="text" class="w-full px-4 py-2 border rounded-lg outline-none focus:border-blue-500" placeholder="Email / Tên đăng nhập">
+                <input type="password" class="w-full px-4 py-2 border rounded-lg outline-none focus:border-blue-500" placeholder="Mật khẩu">
+                <button onclick="alert('Đang xác thực...')" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold">Xác nhận</button>
+            </div>
+            <p class="mt-6 text-center text-sm text-gray-500">
+                <span id="authSwitchText">Chưa có tài khoản?</span>
+                <button onclick="switchAuth()" id="authSwitchBtn" class="text-blue-600 font-bold hover:underline ml-1">Đăng ký ngay</button>
+            </p>
+        </div>
+    </div>
 
-        // Đã nhân đôi data để test phân trang (12 bộ PC)
-        const pcs = [
-            { id: 'pc1', name: 'PC Văn Phòng Basic', cpu: 'Core i3 12100', ram: '8GB DDR4', vga: 'Onboard', storage: '256GB SSD', price: 6500000, warranty: '12 Tháng', img: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc2', name: 'PC Gaming Esport', cpu: 'Core i5 12400F', ram: '16GB DDR4', vga: 'GTX 1660 Super', storage: '512GB NVMe', price: 12500000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc3', name: 'PC Đồ Họa Creator', cpu: 'Ryzen 7 5700X', ram: '32GB DDR4', vga: 'RTX 3060 12GB', storage: '1TB NVMe', price: 21000000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc4', name: 'PC Gaming High-End', cpu: 'Core i7 13700K', ram: '32GB DDR5', vga: 'RTX 4070 Ti', storage: '1TB Gen4', price: 45000000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1605648916319-cf082f7524a1?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc5', name: 'PC Mini ITX', cpu: 'Ryzen 5 7600', ram: '16GB DDR5', vga: 'RX 7600', storage: '512GB NVMe', price: 24500000, warranty: '24 Tháng', img: 'https://images.unsplash.com/photo-1555617782-b7e80a520eb0?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc6', name: 'PC Server Workstation', cpu: 'Dual Xeon E5', ram: '64GB ECC', vga: 'Quadro P2000', storage: '2TB SSD', price: 30000000, warranty: '12 Tháng', img: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=400&q=80' },
-            // Bản sao để test trang 2
-            { id: 'pc7', name: 'PC Học Tập Giá Rẻ', cpu: 'Core i3 10105F', ram: '8GB DDR4', vga: 'GT 1030', storage: '256GB SSD', price: 5500000, warranty: '12 Tháng', img: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc8', name: 'PC Gaming Tầm Trung', cpu: 'Ryzen 5 5600', ram: '16GB DDR4', vga: 'RTX 3050', storage: '500GB NVMe', price: 15500000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc9', name: 'PC Edit Video 4K', cpu: 'Core i5 13600K', ram: '32GB DDR5', vga: 'RTX 4060 Ti', storage: '1TB NVMe', price: 32000000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc10', name: 'PC Siêu Máy Tính', cpu: 'Core i9 14900K', ram: '64GB DDR5', vga: 'RTX 4090', storage: '2TB Gen4', price: 110000000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1605648916319-cf082f7524a1?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc11', name: 'PC APU Giải Trí', cpu: 'Ryzen 5 4600G', ram: '16GB DDR4', vga: 'Radeon Vega', storage: '512GB SSD', price: 7500000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1555617782-b7e80a520eb0?auto=format&fit=crop&w=400&q=80' },
-            { id: 'pc12', name: 'PC Kiến Trúc Sư', cpu: 'Ryzen 9 7950X', ram: '64GB DDR5', vga: 'RTX 4080', storage: '2TB NVMe', price: 85000000, warranty: '36 Tháng', img: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=400&q=80' }
-        ];
-
-        let cart = [];
-        const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-
-        // --- CẤU HÌNH PHÂN TRANG ---
-        let currentPage = 1;
-        const itemsPerPage = 6; // 6 PC 1 trang
-
-        // Hàm chính để vẽ giao diện Sản phẩm + Phân trang
-        function renderProducts(filterText = '') {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
+    <div id="successToast" class="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 scale-50 hidden transition-all duration-300 ease-out">
+        <div class="bg-white/95 backdrop-blur-md px-8 py-6 rounded-2xl shadow-2xl flex flex-col items-center">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-3 shadow-lg shadow-green-500/40">
+                <i class="fa-solid fa-check text-white text-3xl font-bold"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800">Đã thêm vào giỏ hàng!</h3>
+        </div>
+    </div>
+    
+    <div id="checkoutModal" class="hidden fixed inset-0 bg-black/60 z-[70] flex items-center justify-center backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden relative max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                <h2 class="text-xl font-bold text-gray-800">Thanh toán đơn hàng</h2>
+                <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
             
-            // 1. Lọc sản phẩm theo từ khóa tìm kiếm
-            const filtered = pcs.filter(pc => pc.name.toLowerCase().includes(filterText.toLowerCase()));
-            
-            // 2. Tính toán Phân trang
-            const totalPages = Math.ceil(filtered.length / itemsPerPage);
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const pcsToShow = filtered.slice(startIndex, endIndex); // Lấy đúng 6 PC của trang hiện tại
-            
-            if (pcsToShow.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-lg">Không tìm thấy sản phẩm nào phù hợp!</div>`;
-            }
-
-            // 3. Vẽ PC ra màn hình
-            pcsToShow.forEach(pc => {
-                grid.innerHTML += `
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                        <img src="${pc.img}" alt="${pc.name}" class="w-full h-56 object-cover border-b border-gray-100">
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-3 text-gray-800 line-clamp-1">${pc.name}</h3>
-                            <div class="text-sm text-gray-600 mb-5 space-y-2 bg-gray-50 p-3 rounded-lg">
-                                <p><i class="fa-solid fa-microchip w-5 text-blue-500"></i> ${pc.cpu}</p>
-                                <p><i class="fa-solid fa-memory w-5 text-purple-500"></i> ${pc.ram}</p>
-                                <p><i class="fa-solid fa-gamepad w-5 text-red-500"></i> ${pc.vga}</p>
-                                <p><i class="fa-solid fa-hard-drive w-5 text-green-500"></i> ${pc.storage}</p>
+            <div class="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-50/50">
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-gray-800 mb-3 text-sm uppercase">Thông tin người nhận</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="custName" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 text-sm" placeholder="Họ và tên">
+                                <input type="text" id="custPhone" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 text-sm" placeholder="Số điện thoại">
                             </div>
-                            <div class="flex justify-between items-center pt-2">
-                                <span class="text-xl font-black text-red-600">${formatPrice(pc.price)}</span>
-                                <button onclick="addToCart('${pc.id}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 hover:shadow-blue-500/30 transition-all">
-                                    <i class="fa-solid fa-cart-plus mr-1"></i> Mua
-                                </button>
+                            <input type="email" id="custEmail" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 text-sm" placeholder="Email nhận hóa đơn">
+                            <textarea id="custAddress" rows="3" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 text-sm resize-none" placeholder="Địa chỉ giao hàng"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-gray-800 mb-3 text-sm uppercase">Thanh toán</h3>
+                        <select id="paymentMethod" onchange="toggleQRCode()" class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-blue-500 text-sm bg-white">
+                            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="BANK">Chuyển khoản ngân hàng</option>
+                        </select>
+
+                        <div id="qrCodeContainer" class="hidden mt-4 p-4 border border-blue-200 bg-blue-50/50 rounded-lg flex flex-col items-center justify-center transition-all duration-300">
+                            <p class="text-sm font-semibold text-blue-800 mb-3">Quét mã QR để thanh toán</p>
+                            
+                            <img src="https://img.vietqr.io/image/mbbank-123456789-compact2.png" alt="Mã QR Thanh toán" class="w-40 h-40 object-cover rounded-lg shadow-sm border border-white">
+                            
+                            <div class="text-xs text-gray-600 mt-3 text-center space-y-1">
+                                <p>Ngân hàng: <strong>MB Bank</strong></p>
+                                <p>Số tài khoản: <strong>0378205173</strong></p>
+                                <p>Chủ tài khoản: <strong>NGUYEN THANH NGUYEN</strong></p>
+                                <p class="text-red-500 font-medium italic mt-2">* Nội dung CK: <span class="text-blue-600">SĐT của bạn</span></p>
                             </div>
                         </div>
                     </div>
-                `;
-            });
+                </div>
 
-            // 4. Vẽ các nút Phân trang
-            renderPagination(totalPages);
-        }
+                <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full">
+                    <h3 class="font-bold text-gray-800 mb-4 text-sm uppercase border-b pb-2">Tóm tắt đơn hàng</h3>
+                    
+                    <div id="checkoutItems" class="flex-1 overflow-y-auto space-y-3 mb-4 min-h-[150px] pr-2">
+                        </div>
 
-        // Vẽ các nút trang (1, 2, 3...)
-        function renderPagination(totalPages) {
-            const paginationEl = document.getElementById('pagination');
-            paginationEl.innerHTML = '';
-
-            if (totalPages <= 1) return; // Nếu có 1 trang thì ẩn luôn thanh chuyển trang
-
-            for (let i = 1; i <= totalPages; i++) {
-                // Trạng thái nút đang chọn và nút bình thường
-                const btnClass = i === currentPage 
-                    ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-500/30 border-blue-600' 
-                    : 'bg-white text-gray-600 hover:bg-gray-100 hover:text-blue-600 border-gray-200';
-                
-                paginationEl.innerHTML += `
-                    <button onclick="changePage(${i})" class="w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${btnClass}">
-                        ${i}
-                    </button>
-                `;
-            }
-        }
-
-        // Chuyển trang
-        function changePage(page) {
-            currentPage = page;
-            renderProducts(document.getElementById('searchInput').value);
-            // Tự động cuộn mượt mà lên đầu danh sách sản phẩm
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Logic Tìm kiếm: Gõ tới đâu, load tới đó, đưa về trang 1
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            currentPage = 1; // Khi tìm kiếm phải reset về trang 1
-            renderProducts(e.target.value);
-        });
-
-        // --- CÁC HÀM GIỎ HÀNG (Giữ nguyên của bạn) ---
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        const generateOrderId = () => 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-
-        async function addToCart(pcId) {
-            const pc = pcs.find(p => p.id === pcId);
-            const orderId = generateOrderId();
-            cart.push({ orderId: orderId, ...pc });
-            
-            updateCartUI();
-            
-            // Hiện Toast thông báo thay vì bật Giỏ hàng lên
-            alert(`✅ Đã thêm [${pc.name}] vào giỏ hàng!`);
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: 'add', id: orderId, pcName: pc.name, price: pc.price })
-                });
-            } catch (err) { console.error("Lỗi đồng bộ:", err); }
-        }
-
-        async function removeFromCart(orderId) {
-            cart = cart.filter(item => item.orderId !== orderId);
-            updateCartUI();
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: 'delete', id: orderId })
-                });
-            } catch (err) { console.error("Lỗi xóa:", err); }
-            if(cart.length === 0) toggleCart();
-        }
-
-        function updateCartUI() {
-            document.getElementById('cartCount').innerText = cart.length;
-            const container = document.getElementById('cartItems');
-            const totalEl = document.getElementById('cartTotal');
-            
-            container.innerHTML = '';
-            let total = 0;
-
-            if (cart.length === 0) {
-                container.innerHTML = '<div class="text-center mt-10"><i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i><p class="text-gray-500">Giỏ hàng trống.</p></div>';
-            } else {
-                cart.forEach(item => {
-                    total += item.price;
-                    container.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col">
-                            <div class="flex justify-between items-start mb-3">
-                                <h4 class="font-bold text-sm text-gray-800 line-clamp-1 pr-2">${item.name}</h4>
-                            </div>
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-red-600 font-bold">${formatPrice(item.price)}</span>
-                                <button onclick="removeFromCart('${item.orderId}')" class="text-xs bg-red-50 text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">
-                                    <i class="fa-solid fa-trash mr-1"></i> Xóa
-                                </button>
+                    <div class="border-t border-dashed border-gray-200 pt-4 space-y-3 text-sm">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tạm tính</span>
+                            <span id="checkoutSubtotal" class="font-semibold">0đ</span>
+                        </div>
+                        
+                        <div class="border border-red-200 border-dashed rounded-lg p-3 bg-red-50/30">
+                            <label class="text-xs font-semibold text-red-500 mb-2 block">Mã giảm giá</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="voucherCode" class="flex-1 px-3 py-1.5 border border-gray-200 rounded outline-none focus:border-red-400 text-sm" placeholder="Nhập mã (VD: GIAM50)">
+                                <button onclick="applyVoucher()" class="bg-red-600 text-white px-4 rounded text-sm font-semibold hover:bg-red-700 transition">Áp dụng</button>
                             </div>
                         </div>
-                    `;
-                });
-            }
-            totalEl.innerText = formatPrice(total);
-        }
 
-        async function checkoutAll() {
-            if (cart.length === 0) return alert('Giỏ hàng đang trống!');
-            alert('Đang xử lý thanh toán...');
-            for (const item of cart) {
-                try {
-                    await fetch(SCRIPT_URL, {
-                        method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-                        body: JSON.stringify({ action: 'checkout', id: item.orderId })
-                    });
-                } catch (err) {}
-            }
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            alert('🎉 Thanh toán thành công!');
-        }
+                        <div class="flex justify-between text-green-600 font-medium">
+                            <span>Giảm giá</span>
+                            <span id="checkoutDiscount">-0đ</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pt-2 border-t">
+                            <span class="font-bold text-gray-800 text-base">Tổng thanh toán</span>
+                            <span id="checkoutTotal" class="text-2xl font-black text-red-600">0đ</span>
+                        </div>
+                    </div>
 
-        // Khởi động load trang 1
-        renderProducts();
-    </script>
+                    <button onclick="confirmOrder()" class="w-full bg-[#f42456] hover:bg-[#d91d4a] text-white py-3.5 rounded-lg font-bold mt-5 transition-colors shadow-lg shadow-red-500/30 text-lg">
+                        XÁC NHẬN ĐẶT HÀNG
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/index.js"></script>
 </body>
 </html>
