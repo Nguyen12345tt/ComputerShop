@@ -1,7 +1,6 @@
 // --- CẤU HÌNH HỆ THỐNG ---
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpflaFvw7536vms9PBGCwoaXcjBP3SveAtFZE69-SBLGSd-PWDGf3MUCqMAddYB-aD/exec';
 
-// --- MẢNG 12 SẢN PHẨM DEMO (Chạy offline siêu tốc) ---
 const pcs = [
     { id: 'pc1', name: 'PC Văn Phòng Basic', cpu: 'Core i3 12100', ram: '8GB DDR4', vga: 'Onboard', storage: '256GB SSD', price: 6500000, img: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=400&q=80' },
     { id: 'pc2', name: 'PC Gaming Esport', cpu: 'Core i5 12400F', ram: '16GB DDR4', vga: 'GTX 1660 Super', storage: '512GB NVMe', price: 12500000, img: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=400&q=80' },
@@ -78,25 +77,42 @@ function changePage(page) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- 2. LOGIC TÌM KIẾM ---
 document.getElementById('searchInput').addEventListener('input', (e) => {
     currentPage = 1;
     renderProducts(e.target.value);
 });
 
-// --- 3. GIỎ HÀNG & MUA NGAY ---
 function toggleCart() {
     const modal = document.getElementById('cartModal');
     modal.classList.toggle('hidden');
     modal.style.display = modal.classList.contains('hidden') ? 'none' : 'flex';
 }
 
-// HIỆU ỨNG BẬT CHỮ V (TOAST)
-function showSuccessToast() {
-    const toast = document.getElementById('successToast');
+// --- 2. HIỆU ỨNG TOAST ĐA NĂNG ---
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('customToast');
+    const iconBg = document.getElementById('toastIconBg');
+    const icon = document.getElementById('toastIcon');
     
+    document.getElementById('toastMessage').innerText = message;
+    
+    // Reset màu và icon
+    iconBg.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-lg';
+    icon.className = 'fa-solid text-white text-3xl font-bold';
+    
+    // Tự động đổi màu và Icon theo trạng thái
+    if (type === 'success') {
+        iconBg.classList.add('bg-green-500', 'shadow-green-500/40');
+        icon.classList.add('fa-check');
+    } else if (type === 'error') {
+        iconBg.classList.add('bg-red-500', 'shadow-red-500/40');
+        icon.classList.add('fa-xmark');
+    } else if (type === 'warning') {
+        iconBg.classList.add('bg-yellow-500', 'shadow-yellow-500/40');
+        icon.classList.add('fa-exclamation');
+    }
+
     toast.classList.remove('hidden');
-    
     setTimeout(() => {
         toast.classList.remove('opacity-0', 'scale-50');
         toast.classList.add('opacity-100', 'scale-100');
@@ -106,28 +122,25 @@ function showSuccessToast() {
         toast.classList.remove('opacity-100', 'scale-100');
         toast.classList.add('opacity-0', 'scale-50');
         setTimeout(() => toast.classList.add('hidden'), 300); 
-    }, 1500);
+    }, 2000); // Để 2 giây cho khách kịp đọc chữ
 }
 
-// Hàm Mua Ngay
 function buyNow(pcId) {
     addToCart(pcId, false); 
     openCheckoutModal();
 }
 
-// Hàm Thêm Vào Giỏ
-async function addToCart(pcId, showToast = true) {
+async function addToCart(pcId, showToastAlert = true) {
     const pc = pcs.find(p => p.id === pcId);
     const orderId = 'ORD-' + Math.random().toString(36).substr(2, 5).toUpperCase();
     
     cart.push({ orderId, ...pc });
     updateCartUI(); 
     
-    if (showToast) {
-        showSuccessToast(); 
+    if (showToastAlert) {
+        showToast('Đã thêm vào giỏ hàng!', 'success'); // Cập nhật gọi hàm mới
     }
     
-    // Đẩy dữ liệu ngầm lên Google Sheet
     try {
         fetch(SCRIPT_URL, {
             method: 'POST', mode: 'no-cors',
@@ -159,10 +172,12 @@ function removeFromCart(orderId) {
     updateCartUI();
 }
 
-// --- 4. ĐĂNG NHẬP / ĐĂNG KÝ ---
+// --- 3. ĐĂNG NHẬP / ĐĂNG KÝ (LIÊN KẾT SERVER) ---
 function openAuthModal(mode) {
     const title = document.getElementById('authTitle');
     title.innerText = mode === 'login' ? 'Đăng nhập' : 'Đăng ký tài khoản';
+    document.getElementById('authSwitchText').innerText = mode === 'login' ? 'Chưa có tài khoản?' : 'Đã có tài khoản?';
+    document.getElementById('authSwitchBtn').innerText = mode === 'login' ? 'Đăng ký ngay' : 'Đăng nhập';
     document.getElementById('authModal').classList.remove('hidden');
 }
 
@@ -171,17 +186,94 @@ function closeAuthModal() {
 }
 
 function switchAuth() {
-    const title = document.getElementById('authTitle');
-    const isLogin = title.innerText === 'Đăng nhập';
+    const isLogin = document.getElementById('authTitle').innerText === 'Đăng nhập';
     openAuthModal(isLogin ? 'register' : 'login');
 }
 
-// --- 5. LOGIC THANH TOÁN (CHECKOUT) ---
+async function submitAuth() {
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value.trim();
+    const isLogin = document.getElementById('authTitle').innerText === 'Đăng nhập';
+
+    if (!email || !password) {
+        showToast("Vui lòng điền đủ Email & Mật khẩu!", "warning"); // Thay alert
+        return;
+    }
+
+    const btn = document.querySelector('#authModal button.bg-blue-600');
+    const originalText = btn.innerText;
+    btn.innerText = 'Đang xử lý...';
+    btn.disabled = true;
+
+    const authUrl = isLogin 
+        ? 'https://computershop-i88k.onrender.com/login' 
+        : 'https://computershop-i88k.onrender.com/register';
+
+    try {
+        const response = await fetch(authUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password })
+        });
+        
+        const data = await response.json();
+
+        if (isLogin) {
+            if (data.status === 'success') {
+                closeAuthModal();
+                showToast("Đăng nhập thành công!", "success"); // V xanh
+                localStorage.setItem('techgear_currentUser', data.username);
+                checkLoginState(); 
+            } else {
+                showToast(data.message, "error"); // X đỏ
+            }
+        } else {
+            if (data.status === 'success') {
+                showToast("Đăng ký thành công!", "success"); // V xanh
+                switchAuth(); 
+            } else {
+                showToast(data.message, "error"); // X đỏ báo trùng email
+            }
+        }
+    } catch (error) {
+        showToast("Lỗi kết nối Máy chủ!", "error"); // Thay alert
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Cập nhật giao diện Header
+function checkLoginState() {
+    const user = localStorage.getItem('techgear_currentUser');
+    const authDiv = document.getElementById('authButtons');
+    
+    if (user) {
+        authDiv.innerHTML = `
+            <span class="text-sm font-semibold text-blue-400">👋 Chào, ${user}</span>
+            <button onclick="logout()" class="text-sm text-gray-400 hover:text-red-500 ml-3 transition" title="Đăng xuất"><i class="fa-solid fa-sign-out-alt text-lg"></i></button>
+        `;
+    } else {
+        authDiv.innerHTML = `
+            <button onclick="openAuthModal('login')" class="text-sm font-medium hover:text-blue-400 transition">Đăng nhập</button>
+            <span class="text-gray-700">|</span>
+            <button onclick="openAuthModal('register')" class="text-sm font-medium hover:text-blue-400 transition">Đăng ký</button>
+        `;
+    }
+}
+
+function logout() {
+    localStorage.removeItem('techgear_currentUser');
+    checkLoginState();
+    showToast("Đã đăng xuất!", "success"); // Cập nhật gọi hàm mới
+}
+
+// --- 4. LOGIC THANH TOÁN (CHECKOUT) ---
 let currentDiscount = 0; 
 
 function openCheckoutModal() {
     if (cart.length === 0) {
-        alert("Giỏ hàng đang trống! Vui lòng chọn sản phẩm trước."); 
+        showToast("Giỏ hàng đang trống! Vui lòng chọn sản phẩm trước.", "warning");
         return;
     }
     
@@ -248,9 +340,9 @@ function applyVoucher() {
         currentDiscount = 50000; 
         document.getElementById('checkoutDiscount').innerText = "-" + formatPrice(currentDiscount);
         renderCheckoutItems(); 
-        alert("Áp dụng mã giảm giá 50.000đ thành công!");
+        showSuccessToast("Áp dụng mã giảm giá thành công!"); // Đổi alert thành toast luôn cho sang
     } else {
-        alert("Mã giảm giá không hợp lệ hoặc đã hết hạn!");
+        showSuccessToast("Mã giảm giá không hợp lệ hoặc đã hết hạn!"); // Sử dụng toast thay vì alert
     }
 }
 
@@ -289,8 +381,9 @@ async function confirmOrder() {
     document.getElementById('custEmail').value = '';
     document.getElementById('custAddress').value = '';
 
-    alert('🎉 ĐẶT HÀNG THÀNH CÔNG! TechGear sẽ liên hệ với bạn trong giây lát.');
+    showSuccessToast('🎉 ĐẶT HÀNG THÀNH CÔNG!'); // Báo thành công bằng toast
 }
 
-// KHỞI ĐỘNG GIAO DIỆN KHI VỪA MỞ TRANG (Không cần fetch qua Server nữa)
+// KHỞI ĐỘNG
 renderProducts();
+checkLoginState(); // Bật kiểm tra trạng thái login ngay khi mở web
